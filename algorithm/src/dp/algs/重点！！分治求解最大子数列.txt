@@ -1,0 +1,101 @@
+// The programming to find tne LargestSubArray
+// and it is clearly that the original Array shouldn't
+// contains only positive number or nagetive number.
+#include <stdio.h>
+#include <stdlib.h>
+#define LENGTH 100007
+#define MIN_INFINITY -10000007
+struct record
+{
+    int left;
+    int right;
+    int sum;
+};
+
+
+struct record findMaxSubArray(int left, int right);
+struct record findMaxCrossSubArray(int left, int middle, int right);
+int intArray[LENGTH];
+
+int main()
+{
+    int n;
+    struct record R;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &intArray[i]);
+    R = findMaxSubArray(0, n - 1);
+    printf("the location of subarray is from %d to %d , and the sum is %d", R.left + 1, R.right + 1, R.sum);
+    return 0;
+}
+
+struct record findMaxSubArray(int left, int right)
+{
+    struct record R;
+    R.left = left;
+    R.right = right;
+    if (left == right)
+    {
+        R.sum = intArray[left];
+        // printf("R.sum : %d\n", R.sum);
+        return R;
+    }
+    else if (left < right)
+    {
+        struct record R1;
+        R1.sum = 0;
+        struct record R2;
+        R2.sum = 0;
+        struct record R3;
+        R3.sum = 0;
+        int mid = (left + right) / 2;
+        R1 = findMaxSubArray(left, mid);
+        R2 = findMaxSubArray(mid + 1, right);
+        if(left < mid && mid < right - 1)
+            R3 = findMaxCrossSubArray(left, mid, right);
+        // printf("R1.sum : %d R2.sum : %d R3.sum : %d\n", R1.sum, R2.sum, R3.sum);
+        // printf("R1.left : %d R2.left : %d R3.left : %d\n",R1.left,R2.left,R3.left);
+        // printf("R1.right : %d R2.right : %d R3.right : %d\n",R1.right,R2.right,R3.right);
+        if (R1.sum >= R2.sum && R1.sum >= R3.sum)
+            return R1;
+        if (R2.sum >= R1.sum && R2.sum >= R3.sum)
+            return R2;
+        if (R3.sum >= R2.sum && R3.sum >= R1.sum)
+            return R3;
+    }
+    else
+    {
+        R.sum = 0;
+        return R;
+    }
+}
+
+struct record findMaxCrossSubArray(int left, int middle, int right)
+{
+    struct record R;
+    R.sum = 0;
+    int suml = 0, max_suml = MIN_INFINITY, sumr = 0, max_sumr = MIN_INFINITY;
+    int tem_left = middle, tem_right = right;
+    for (int i = middle; i >= left; i--)
+    {
+        suml += intArray[i];
+        if (suml > max_suml)
+        {
+            max_suml = suml;
+            tem_left = i;
+        }
+    }
+    for (int i = middle + 1; i <= right; i++)
+    {
+        sumr += intArray[i];
+        if (sumr > max_sumr)
+        {
+            max_sumr = sumr;
+            tem_right = i;
+        }
+    }
+    R.sum = max_suml + max_sumr;
+    R.left = tem_left;
+    R.right = tem_right;
+    return R;
+}
