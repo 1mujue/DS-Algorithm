@@ -10,7 +10,6 @@ struct ListNode {
 
 
 ListHead newLinkedList(int (*Compare)(const ElementType*, const ElementType*)){
-    printf("Creating a new LinkedList...\n");
     ListHead H = (ListHead)malloc(sizeof(struct ListNode));
     MY_RUNTIME_ASSERT(H != NULL, "Memory allocation failed for LinkedList\n");
     MY_RUNTIME_ASSERT(Compare != NULL, "Comparison function cannot be NULL\n");
@@ -65,8 +64,8 @@ ElementType ListRetrieve(ListNodeP P){
     return P->Element;
 }
 ListNodeP ListFind(ElementType X, ListHead L){
-    MY_RUNTIME_ASSERT(L != NULL, "LinkedList cannot be NULL");
-    MY_RUNTIME_ASSERT(L->Compare != NULL, "Comparison function cannot be NULL");
+    MY_RUNTIME_ASSERT(L != NULL, "LinkedList cannot be NULL\n");
+    MY_RUNTIME_ASSERT(L->Compare != NULL, "Comparison function cannot be NULL\n");
     ListNodeP P = L->Next;
     while(P != NULL && L->Compare(&X, &P->Element) != 0){
         P = ListAdvance(P);

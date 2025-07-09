@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -g -lmingw32
 DST=DS.exe
-SRC:=$(wildcard ./src/**/*.c ./main.c)
+SRC:=$(wildcard ./src/**/*.c) $(wildcard ./src/*.c) $(wildcard ./test/**/*.c) $(wildcard ./test/*.c) ./main.c
 OBJ:=$(patsubst %.c, %.o, $(SRC))
 INCLUDE= -I ./include/
 
@@ -17,4 +17,5 @@ run: $(DST)
 	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(OBJ)
+	@rm -f $(OBJ) out/$(DST)
+	@rm -rf out/
